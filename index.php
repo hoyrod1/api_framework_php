@@ -19,6 +19,9 @@ require "vendor/autoload.php";
 
 set_exception_handler("ErrorHandler::handleException");
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 // use Src\TaskController\TaskController;
 
 $url_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
@@ -35,6 +38,8 @@ if ($resource != "tasks") {
 }
 
 header("Content-Type: application/json; charset=UTF-8");
+
+$database = new Database($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
 
 $controller = new TaskController;
 

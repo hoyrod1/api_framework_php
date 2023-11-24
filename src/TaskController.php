@@ -42,7 +42,7 @@ class TaskController
         if ($id === null) {
           
             if ($method == "GET") {
-                echo "This is the index page";
+                echo "This is the index page is";
             } elseif ($method == "POST") {
                 echo "This is the create page";
             } else {
