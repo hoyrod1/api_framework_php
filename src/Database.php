@@ -69,6 +69,10 @@ class Database
         $pdo_conn = new PDO($dsn, $this->_username, $this->_password);
         
         $pdo_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //SET PDO::ATTR_EMULATE_PREPARES TO "false" WHEN RETRIEVING JSON DATA
+        $pdo_conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        //SET PDO::ATTR_STRINGIFY_FETCHES TO "false" WHEN RETRIEVING JSON DATA
+        $pdo_conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
         
         return $pdo_conn;
     }
