@@ -94,5 +94,65 @@ class TasksGateway
         }
         return $results;
     }
+    //*=========================================================================*//
+
+    //*=========================================================================*//
+    /**
+     * The create() FUNCTION CREATES A NEW RESOURCE 
+     * 
+     * @param array $data Thiis contains an array of data
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    public function create(array $data): string
+    {
+        $sql = "INSERT INTO $this->_table_name (name, priority, is_completed)
+                VALUES (:name, :priority, :is_completed)";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":name", $data['name'], PDO::PARAM_STR);
+        // IF THE priority FIELD IS NOT SET BIND THE priority TO NULL VALUE
+        if (empty($data['priority'])) {
+            $stmt->bindValue(":priority", null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(":priority", $data['priority'], PDO::PARAM_INT); 
+        }
+        $stmt->bindValue(":is_completed", $data['is_completed'] ?? false, PDO::PARAM_BOOL);
+        $stmt->execute();
+        return $this->_conn->lastInsertId();
+
+    }
+    //*=========================================================================*//
+
+    //*=========================================================================*//
+    /**
+     * The update() FUNCTION UPDATES A NEW RESOURCE 
+     * 
+     * @param string $id   This contains an id of the resource
+     * @param array  $data This contains an array of data
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    public function update(string $id, array $data): string
+    {
+        $fields = [];
+        if (!empty($data['name'])) {
+            $fields['name'] = [
+                $data['name'],
+                PDO::PARAM_STR
+            ];
+        }
+        $sql = "UPDATE $this->_table_name SET 
+                name = :name, 
+                priority = :priority, 
+                is_completed = :is_completed
+                WHERE id = :id";
+        $stmt = $this->_conn->prepare($sql);
+
+    }
+    //*=========================================================================*//
 
 }

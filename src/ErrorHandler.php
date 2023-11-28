@@ -24,8 +24,34 @@
 
 class ErrorHandler
 {
+    //*================THE PUBLIC STATIC FUNCTION handleErrors()===============*//
     /**
-     * This class handles the excepetions
+     * This class handles the errors
+     * 
+     * @param int    $errno   This is an Object of the throwable Class
+     * @param string $errstr  This is an Object of the throwable Class
+     * @param string $errfile This is an Object of the throwable Class
+     * @param int    $errline This is an Object of the throwable Class
+     * 
+     * @access public  
+     * 
+     * @return void
+     */
+    public static function handleErrors(
+        int $errno, 
+        string $errstr, 
+        string $errfile, 
+        int $errline
+    ):void {
+
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+
+    }
+    //*===========================================================================*//
+
+    //*================THE PUBLIC STATIC FUNCTION handleException()===============*//
+    /**
+     * This static function handles the excepetions errors
      * 
      * @param mixed $exception This is an Object of the throwable Class
      * 
@@ -46,4 +72,5 @@ class ErrorHandler
             ]
         );
     }
+    //*===========================================================================*//
 }
