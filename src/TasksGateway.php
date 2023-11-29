@@ -127,16 +127,16 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The update() FUNCTION UPDATES A NEW RESOURCE 
+     * The update() FUNCTION UPDATES AN EXISTING RESOURCE 
      * 
      * @param string $id   This contains an id of the resource
-     * @param array  $data This contains an array of data
+     * @param array  $data This contains an array of the resource
      * 
      * @access public  
      * 
-     * @return mixed
+     * @return int
      */
-    public function update(string $id, array $data): string
+    public function update(string $id, array $data): int
     {
         $fields = [];
         if (!empty($data['name'])) {
@@ -145,13 +145,67 @@ class TasksGateway
                 PDO::PARAM_STR
             ];
         }
-        $sql = "UPDATE $this->_table_name SET 
-                name = :name, 
-                priority = :priority, 
-                is_completed = :is_completed
-                WHERE id = :id";
-        $stmt = $this->_conn->prepare($sql);
+        if (array_key_exists("priority", $data)) {
+            $fields['priority'] = [
+              $data['priority'],
+              $data['priority'] === null ? PDO::PARAM_NULL : PDO::PARAM_INT
+            ];
+        }
+        if (array_key_exists("is_completed", $data)) {
+            $fields['is_completed'] = [
+              $data['is_completed'],
+              PDO::PARAM_BOOL
+            ];
+        }
+        $set_Colunms = array_map(
+            function ($value) {
+                return "$value = :$value";
+            }, array_keys($fields)
+        );
+        
+        if (empty($set_Colunms)) {
+            return 0;
+        } else {
 
+            $sql = "UPDATE $this->_table_name SET "
+            . implode(", ", $set_Colunms)
+            . " WHERE id = :id";
+            $stmt = $this->_conn->prepare($sql);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+            foreach ($fields as $name => $values) {
+
+                $stmt->bindValue(":$name", $values[0], $values[1]);
+
+            }
+            // ===============BINDING VALUES THE LONG WAY======================= //
+            // $stmt->bindValue(":name", $fields['name'][0], $fields['name'][1]);
+            // $stmt->bindValue(":priority", $fields['priority'][0], $fields['priority'][1]);
+            // $stmt->bindValue(":is_completed", $fields['is_completed'][0], $fields['is_completed'][1]);
+            //*=========================================================================*//
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
+    }
+    //*=========================================================================*//
+
+    //*=========================================================================*//
+    /**
+     * The delete() FUNCTION DELETES AN EXISTING RESOURCE 
+     * 
+     * @param string $id The id of a individual resource
+     * 
+     * @access public  
+     * 
+     * @return int
+     */
+    public function delete(string $id): int
+    {
+        $sql = "DELETE FROM $this->_table_name WHERE id = :id";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount();
     }
     //*=========================================================================*//
 

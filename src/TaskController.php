@@ -70,7 +70,14 @@ class TaskController
                 echo json_encode($tasks);
 
             } elseif ($method == "POST") {
-
+                // WHEN USING HTTPIE TO INCLUDE FORM DATA
+                // ENTER KEY="Value string" KEY=VALUE_INTEGER
+                // TO SEE THE VALUES IN HTTPIE ENTER --form AT THE END
+                // TO RETRIEVE DATA INPUT FROM THE REQUEST BODY
+                // USE file_get_contents FUNCTION AND THE php://input STREAM
+                // PASS THE file_get_contents FUNCTION INTO json_decode FUNCTION
+                // PASS IN true as 2nd AURGUMENT TO CONVERT TO ASSOCIATE ARRAY
+                // TYPE CAST THE RETURN VALUE INTO AN (array) IF THERE IS NO DATA
                 $data = (array) json_decode(file_get_contents("php://input"), true);
                 $errors = $this->_getValidationError($data);
                 if (!empty($errors)) {
@@ -90,13 +97,13 @@ class TaskController
             }
 
         } else {
-
+            // INDIVIDUAL RESOURCE STORED IN THE $task VARIABLE USING THE $id
             $task = $this->_gateway->get($id);
 
             if ($task === false) {
 
                 $this->_responseResourceNotFound($id);
-
+                exit;
             }
 
             switch ($method) {
@@ -105,7 +112,14 @@ class TaskController
                 break;
 
             case 'PATCH':
-
+                // WHEN USING HTTPIE TO INCLUDE FORM DATA
+                // ENTER KEY="Value string" KEY=VALUE_INTEGER
+                // TO SEE THE VALUES IN HTTPIE ENTER --form AT THE END
+                // TO RETRIEVE DATA INPUT FROM THE REQUEST BODY
+                // USE file_get_contents FUNCTION AND THE php://input STREAM
+                // PASS THE file_get_contents FUNCTION INTO json_decode FUNCTION
+                // PASS IN true as 2nd AURGUMENT TO CONVERT TO ASSOCIATE ARRAY
+                // TYPE CAST THE RETURN VALUE INTO AN (array) IF THERE IS NO DATA
                 $data = (array) json_decode(file_get_contents("php://input"), true);
                 $errors = $this->_getValidationError($data, false);
                 if (!empty($errors)) {
@@ -114,11 +128,23 @@ class TaskController
                     return;
                     
                 }
-                echo "This is the update page for $id";
+                $updated_rows = $this->_gateway->update($id, $data);
+                echo json_encode(
+                    [
+                      "message" => "Your tasks has been updates", 
+                      "rows" =>  $updated_rows
+                    ]
+                );
                 break;
 
             case 'DELETE':
-                echo "This is the delete page for $id";
+                $deleted_row = $this->_gateway->delete($id);
+                echo json_encode(
+                    [
+                      "message" => "Your tasks has been deleted", 
+                      "rows" =>  $deleted_row
+                    ]
+                );
                 break;
 
             default:
@@ -181,23 +207,6 @@ class TaskController
     }
     //*===========================================================================*//
 
-    //*= PRIVATE _responseResourceCreated FUNCTION CHECKS IF RESOURCE WAS CREATED=*//
-    /**
-     * This private method handles the response for a indivual resource not found
-     * 
-     * @param string $id The incorrect indvidual id
-     * 
-     * @access public  
-     * 
-     * @return void
-     */
-    private function _responseResourceCreated(string $id): void
-    {
-        http_response_code(201);
-        echo json_encode(["message" => "Your task has been created", "id" => $id]);
-    }
-    //*===========================================================================*//
-
     //*=====PRIVATE _getValidationError FUNCTION CHECKS IF RESOURCE IS VALID======*//
     /**
      * This private method handles the validation of the created resource
@@ -231,6 +240,25 @@ class TaskController
         }
 
         return $errors;
+    }
+    //*===========================================================================*//
+
+    //*===========================================================================*//
+
+    //*= PRIVATE _responseResourceCreated FUNCTION CHECKS IF RESOURCE WAS CREATED=*//
+    /**
+     * This private method handles the response for a indivual resource not found
+     * 
+     * @param string $id The incorrect indvidual id
+     * 
+     * @access public  
+     * 
+     * @return void
+     */
+    private function _responseResourceCreated(string $id): void
+    {
+        http_response_code(201);
+        echo json_encode(["message" => "Your task has been created", "id" => $id]);
     }
     //*===========================================================================*//
 }
