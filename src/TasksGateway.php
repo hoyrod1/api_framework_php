@@ -3,31 +3,32 @@
  * * @file
  * php version 7.4.33
  * 
- * Page for Api Tasks
+ * Page for Api Tasks Configurations
  * 
- * @category Tasks_Table_Gateway
- * @package  Curl_Configuration
+ * @category Tasks_Gateway_Configuration
+ * @package  Class_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks/src/TaskGateway.php
  */
 
 // namespace Src\TaskController;
 
 /**
- * Tasks Table Gateway Class
+ * Tasks Database Table Gateway Class
  * 
  * @category Task_Gateway
  * @package  Task_Gateway_Class
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks/src/TaskGateway.php
  */
 class TasksGateway
 {
     //*=========BEGINNING OF PRIVATE PROPERTIES FOR DATABASE RESOURCES=========*//
     private PDO $_conn;
     private string $_table_name = "tasks";
+    private string $_id = "id";
     private string $_name = "name";
     private string $_priority = "priority";
     private string $_is_completed = "is_completed";
@@ -61,7 +62,7 @@ class TasksGateway
      */
     public function getAll(): array
     {
-        $sql = "SELECT * FROM $this->_table_name ORDER BY $this->_name";
+        $sql = "SELECT * FROM $this->_table_name ORDER BY $this->_id DESC";
         $stmt = $this->_conn->query($sql);
         $data = [];
         while ($results = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -100,7 +101,7 @@ class TasksGateway
     /**
      * The create() FUNCTION CREATES A NEW RESOURCE 
      * 
-     * @param array $data Thiis contains an array of data
+     * @param array $data This contains an array of data
      * 
      * @access public  
      * 

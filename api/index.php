@@ -5,22 +5,22 @@
  * 
  * Landing Page for Api To-Do-List
  * 
- * @category Php_Sdk
- * @package  Curl_Configuration
+ * @category Php_API
+ * @package  Vendor-Composer-.env-src
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks.com
  */
 declare(strict_types=1);
 
 ini_set("display_errors", "On");
 
-require "vendor/autoload.php";
+require dirname(__DIR__) . "/vendor/autoload.php";
 
 set_error_handler("ErrorHandler::handleErrors");
 set_exception_handler("ErrorHandler::handleException");
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 // use Src\TaskController\TaskController;
@@ -28,8 +28,8 @@ $dotenv->load();
 $url_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $url_parts = explode("/", $url_path);
 
-$resource = $url_parts[2];
-$id = $url_parts[3] ?? null;
+$resource = $url_parts[3];
+$id = $url_parts[4] ?? null;
 
 if ($resource != "tasks") {
     // header("HTTP/1.1 404 Not Found");
@@ -38,9 +38,19 @@ if ($resource != "tasks") {
     exit;
 }
 
+$api_key = $_SERVER["HTTP_X_API_KEY"];
+
+echo $api_key;
+exit;
+
 header("Content-Type: application/json; charset=UTF-8");
 
-$database = new Database($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
+$database = new Database(
+    $_ENV['DB_HOST'], 
+    $_ENV['DB_USER'], 
+    $_ENV['DB_PASS'], 
+    $_ENV['DB_NAME']
+);
 
 $taskGateway = new TasksGateway($database);
 

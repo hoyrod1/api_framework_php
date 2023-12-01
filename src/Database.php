@@ -9,7 +9,7 @@
  * @package  Database_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks.com/src/Database.php
  */
 
 /**
@@ -19,7 +19,7 @@
  * @package  Database_Class
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks.com/src/Database.php
  */
 class Database
 {

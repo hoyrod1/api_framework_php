@@ -9,7 +9,7 @@
  * @package  Curl_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.api-todolist.com
+ * @link     https://www.tasks/src/ErrorHandler.php
  */
 
  /**
@@ -19,7 +19,7 @@
   * @package  ErrorHandler_Class
   * @author   Rodney St.Cloud <hoyrod1@aol.com>
   * @license  STC Media inc
-  * @link     https://www.api-todolist.com
+  * @link     https://www.tasks/src/ErrorHandler.php
   */
 
 class ErrorHandler
