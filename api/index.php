@@ -38,12 +38,16 @@ if ($resource != "tasks") {
     exit;
 }
 
+if (empty($_SERVER["HTTP_X_API_KEY"])) {
+    
+    http_response_code(404);
+    echo json_encode(["message" => "missing API key"]);
+    exit;
+
+}
+
 $api_key = $_SERVER["HTTP_X_API_KEY"];
 
-echo $api_key;
-exit;
-
-header("Content-Type: application/json; charset=UTF-8");
 
 $database = new Database(
     $_ENV['DB_HOST'], 
@@ -51,6 +55,19 @@ $database = new Database(
     $_ENV['DB_PASS'], 
     $_ENV['DB_NAME']
 );
+
+$users    = new UsersGateway($database);
+$new_user = $users->getByAPIKey($api_key);
+
+if ($new_user === false) {
+
+    http_response_code(401);
+    echo json_encode(["message" => "Request unauthorized: APIKey is invalid"]);
+    exit;
+
+}
+
+header("Content-Type: application/json; charset=UTF-8");
 
 $taskGateway = new TasksGateway($database);
 

@@ -83,4 +83,25 @@ Class UsersGateway
     }
     //*=========================================================================*//
 
+    //*=========================================================================*//
+    /**
+     * The getByAPIKey() METHOD TO RETEIVES AUTHENTICATED DATA FROM THE USERS TABLE 
+     * 
+     * @param string $key This has the API Key
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    public function getByAPIKey(string $key)
+    {
+        $sql = "SELECT * FROM $this->_table_name WHERE api_key = :api_key";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":api_key", $key, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $results;
+    }
+    //*=========================================================================*//
+
 }

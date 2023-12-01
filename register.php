@@ -32,12 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_ENV['DB_PASS'], 
         $_ENV['DB_NAME']
     );
+    
     $users    = new UsersGateway($database);
     $new_user = $users->createUser($name, $username, $hashed_password, $api_key); 
 
     if ($new_user !== false) {
         $user_entered = $new_user;
-        // echo $user_entered . " has been entered and the API-KEY is: " . $api_key;
         header("location: /api_framework_php/register.php");
         exit;
     } else {
