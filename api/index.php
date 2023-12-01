@@ -11,17 +11,12 @@
  * @license  STC Media inc
  * @link     https://www.tasks.com
  */
+
 declare(strict_types=1);
 
 ini_set("display_errors", "On");
 
-require dirname(__DIR__) . "/vendor/autoload.php";
-
-set_error_handler("ErrorHandler::handleErrors");
-set_exception_handler("ErrorHandler::handleException");
-
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+require __DIR__ . "/bootstrap.php";
 
 // use Src\TaskController\TaskController;
 
@@ -38,17 +33,6 @@ if ($resource != "tasks") {
     exit;
 }
 
-if (empty($_SERVER["HTTP_X_API_KEY"])) {
-    
-    http_response_code(404);
-    echo json_encode(["message" => "missing API key"]);
-    exit;
-
-}
-
-$api_key = $_SERVER["HTTP_X_API_KEY"];
-
-
 $database = new Database(
     $_ENV['DB_HOST'], 
     $_ENV['DB_USER'], 
@@ -56,18 +40,15 @@ $database = new Database(
     $_ENV['DB_NAME']
 );
 
-$users    = new UsersGateway($database);
-$new_user = $users->getByAPIKey($api_key);
+$users_gateway = new UsersGateway($database);
 
-if ($new_user === false) {
+$auth = new Auth($users_gateway);
 
-    http_response_code(401);
-    echo json_encode(["message" => "Request unauthorized: APIKey is invalid"]);
+$validated_auth = $auth->authenticateAPIKey();
+
+if (! $validated_auth) {
     exit;
-
 }
-
-header("Content-Type: application/json; charset=UTF-8");
 
 $taskGateway = new TasksGateway($database);
 
