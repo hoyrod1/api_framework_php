@@ -159,6 +159,16 @@ class TaskController
     }
     //*===========================================================================*//
     
+
+
+
+    //*===========================================================================*//
+    //*THE PRIVATE FUNCTIONS BELOW HEADER RESSPONSE VALIDATION AND ERROR CHECKING*//
+    //*===========================================================================*//
+
+
+    
+    
     //*PRIVATE _responseMethodAllowed FUNCTION CHECKS IF REQUEST METHOD IS ALLOWED*//
     /**
      * This private method handles the response methods allowed
@@ -175,6 +185,8 @@ class TaskController
         header("Allow: $methodsAllowed");
     }
     //*===========================================================================*//
+
+
 
     //*PRIVATE _responseUnprocessibleEntity FUNCTION HANDLES UNPROCESSABLE RESPONSE//
     /**
@@ -193,6 +205,8 @@ class TaskController
     }
     //*===========================================================================*//
 
+
+
     //*====PRIVATE _responseResourceNotFound FUNCTION CHECKS IF RESOURCE EXIST====*//
     /**
      * This private method handles the response for a indivual resource not found
@@ -209,6 +223,8 @@ class TaskController
         echo json_encode(["message" => "The resource: $idNotFound not found"]);
     }
     //*===========================================================================*//
+
+
 
     //*=====PRIVATE _getValidationError FUNCTION CHECKS IF RESOURCE IS VALID======*//
     /**
@@ -245,6 +261,8 @@ class TaskController
         return $errors;
     }
     //*===========================================================================*//
+
+
 
     //*===========================================================================*//
 

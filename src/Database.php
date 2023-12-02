@@ -24,8 +24,14 @@
 class Database
 {
     //*=========BEGINNING OF PRIVATE PROPERTIES FOR DATABASE CONNECTION===========*//
+    // WHEN USING TYPE DECLARATIONS PDO FOR THE private $_conn 
+    // PREFIX THE PDO TYPE WITH A ? TO MAKE IT NULLABLE
+    private ?PDO $_conn = null;
+
     // ONLY DECLARE THESE PRIVATE PROPERTIES FOR THE DATABASE CONNECTION IF
-    //THE CONSTRUCTOR IS PERFORMING ANOTHER TASK OTHER THAN ASSIGNING DATABASE VALUES
+    // SCRIPT IS USING php version 7.4.33
+    // ASSIGNING DATABASE VALUES IN CONTRUCTOR PARAMETER IS NOT SUPPORTED
+    
     private $_servername;
     private $_username;
     private $_password;
@@ -65,16 +71,23 @@ class Database
      */
     public function connect(): PDO
     {
-        $dsn = "mysql:host=$this->_servername;dbname=$this->_dbname";
-        $pdo_conn = new PDO($dsn, $this->_username, $this->_password);
+        // THIS CHECKS IF $this->_conn IS NULL 
+        // TO PREVENT MULTIPLE CALLS TO THE DATABASE CONNECTION 
+        if ($this->_conn === null) {
         
-        $pdo_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //SET PDO::ATTR_EMULATE_PREPARES TO "false" WHEN RETRIEVING JSON DATA
-        $pdo_conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        //SET PDO::ATTR_STRINGIFY_FETCHES TO "false" WHEN RETRIEVING JSON DATA
-        $pdo_conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+            $dsn = "mysql:host=$this->_servername;dbname=$this->_dbname";
+            
+            $this->_conn = new PDO($dsn, $this->_username, $this->_password);
+            
+            $this->_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //SET PDO::ATTR_EMULATE_PREPARES TO "false" WHEN RETRIEVING JSON DATA
+            $this->_conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            //SET PDO::ATTR_STRINGIFY_FETCHES TO "false" WHEN RETRIEVING JSON DATA
+            $this->_conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
         
-        return $pdo_conn;
+        }
+        
+        return $this->_conn;
     }
     //*===================ENDING OF DATABASE CONNECTION=====================*//
 }
