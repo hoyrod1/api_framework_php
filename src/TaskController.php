@@ -89,7 +89,7 @@ class TaskController
                     return;
                     
                 }
-                $return_id = $this->_gateway->create($data);
+                $return_id = $this->_gateway->createForUser($this->_users_id, $data);
                 $this->_responseResourceCreated($return_id);
 
             } else {
@@ -101,7 +101,7 @@ class TaskController
 
         } else {
             // INDIVIDUAL RESOURCE STORED IN THE $task VARIABLE USING THE $id
-            $task = $this->_gateway->get($id);
+            $task = $this->_gateway->getForUser($this->_users_id, $id);
 
             if ($task === false) {
 
@@ -131,7 +131,7 @@ class TaskController
                     return;
                     
                 }
-                $updated_rows = $this->_gateway->update($id, $data);
+                $updated_rows = $this->_gateway->updateForUser($this->_users_id, $id, $data);
                 echo json_encode(
                     [
                       "message" => "Your tasks has been updates", 
@@ -141,7 +141,7 @@ class TaskController
                 break;
 
             case 'DELETE':
-                $deleted_row = $this->_gateway->delete($id);
+                $deleted_row = $this->_gateway->deleteForUser($this->_users_id, $id);
                 echo json_encode(
                     [
                       "message" => "Your tasks has been deleted", 

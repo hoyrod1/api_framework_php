@@ -83,17 +83,20 @@ class TasksGateway
     /**
      * The get() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
      * 
-     * @param string $id The id of a individual resource
+     * @param int    $user_id This is the user_id of the authenticated user
+     * @param string $id      This is the id of a individual resource
      * 
      * @access public  
      * 
      * @return mixed
      */
-    public function get(string $id)
+    public function getForUser(int $user_id, string $id)
     {
-        $sql = "SELECT * FROM $this->_table_name WHERE id = :id";
+        $sql = "SELECT * FROM $this->_table_name 
+                WHERE id = :id AND user_id = :user_id";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->execute();
         $results = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($results !== false) {
@@ -107,16 +110,17 @@ class TasksGateway
     /**
      * The create() FUNCTION CREATES A NEW RESOURCE 
      * 
-     * @param array $data This contains an array of data
+     * @param int   $user_id This is the user_id of the authenticated user
+     * @param array $data    This contains an array of data
      * 
      * @access public  
      * 
      * @return mixed
      */
-    public function create(array $data): string
+    public function createForUser(int $user_id, array $data): string
     {
-        $sql = "INSERT INTO $this->_table_name (name, priority, is_completed)
-                VALUES (:name, :priority, :is_completed)";
+        $sql = "INSERT INTO $this->_table_name(name, priority, is_completed, user_id)
+                VALUES (:name, :priority, :is_completed, :user_id)";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bindValue(":name", $data['name'], PDO::PARAM_STR);
         // IF THE priority FIELD IS NOT SET BIND THE priority TO NULL VALUE
@@ -126,6 +130,7 @@ class TasksGateway
             $stmt->bindValue(":priority", $data['priority'], PDO::PARAM_INT); 
         }
         $stmt->bindValue(":is_completed", $data['is_completed'] ?? false, PDO::PARAM_BOOL);
+        $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->execute();
         return $this->_conn->lastInsertId();
 
@@ -136,14 +141,15 @@ class TasksGateway
     /**
      * The update() FUNCTION UPDATES AN EXISTING RESOURCE 
      * 
-     * @param string $id   This contains an id of the resource
-     * @param array  $data This contains an array of the resource
+     * @param int    $user_id This is the user_id of the authenticated user
+     * @param string $id      This contains an id of the resource
+     * @param array  $data    This contains an array of the resource
      * 
      * @access public  
      * 
      * @return int
      */
-    public function update(string $id, array $data): int
+    public function updateForUser(int $user_id, string $id, array $data): int
     {
         $fields = [];
         if (!empty($data['name'])) {
@@ -176,8 +182,9 @@ class TasksGateway
 
             $sql = "UPDATE $this->_table_name SET "
             . implode(", ", $set_Colunms)
-            . " WHERE id = :id";
+            . " WHERE id = :id AND user_id = :user_id";
             $stmt = $this->_conn->prepare($sql);
+            $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
             foreach ($fields as $name => $values) {
@@ -200,16 +207,19 @@ class TasksGateway
     /**
      * The delete() FUNCTION DELETES AN EXISTING RESOURCE 
      * 
-     * @param string $id The id of a individual resource
+     * @param int    $user_id This is the user_id of the authenticated user
+     * @param string $id      The id of a individual resource
      * 
      * @access public  
      * 
      * @return int
      */
-    public function delete(string $id): int
+    public function deleteForUser(int $user_id,string $id): int
     {
-        $sql = "DELETE FROM $this->_table_name WHERE id = :id";
+        $sql = "DELETE FROM $this->_table_name 
+                WHERE id = :id AND user_id = :user_id";
         $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->rowCount();
