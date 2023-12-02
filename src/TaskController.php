@@ -25,25 +25,28 @@
  */
 class TaskController
 {
-    //*=========BEGINNING OF PRIVATE PROPERTIES FOR DATABASE CONNECTION=========*//
+    //*=========PRIVATE PROPERTIES FOR DATABASE CONNECTION & USERS_ID==========*//
     private $_gateway;
-    //*===========ENDING OF PRIVATE PROPERTIES FOR DATABASE CONNECTION==========*//
+    private $_users_id;
+    //*=========================================================================*//
 
-    //*========BEGINNING OF CONSTRUCTOR FOR TasksGateway OBJECT ASSIGNMENT========*//
+    //*========CONSTRUCTOR FOR TasksGateway OBJECT ASSIGNMENT & users ID========*//
     /**
-     * This constructor takes in the TasksGateway object
+     * This constructor takes in the TasksGateway object and users ID
      *
      * @param mixed $gateway 
+     * @param int   $users_id 
      * 
      * @access public  
      * 
      * @return mixed
      */
-    function __construct(TasksGateway $gateway)
+    function __construct(TasksGateway $gateway, int $users_id)
     {
         $this->_gateway = $gateway;
+        $this->_users_id = $users_id;
     }
-    //*==========ENDING OF CONSTRUCTOR FOR TasksGateway OBJECT ASSIGNMENT=========*//
+    //*===========================================================================*//
 
     //*===========THIS processRequest FUNCTION PROCESS THE URL REQUEST============*//
     /**
@@ -65,7 +68,7 @@ class TaskController
 
             if ($method == "GET") {
               
-                $tasks = $this->_gateway->getAll();
+                $tasks = $this->_gateway->getAllForUser($this->_users_id);
 
                 echo json_encode($tasks);
 

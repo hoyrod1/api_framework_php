@@ -26,7 +26,8 @@ class Auth
 {
     //*=========BEGINNING OF PRIVATE PROPERTIES FOR UsersGateway Class=========*//
     private $_usersGateway;
-    //*===========ENDING OF PRIVATE PROPERTIES FOR UsersGateway Class==========*//
+    private $_users_id;
+    //*=========================================================================*//
 
     //*========BEGINNING OF CONSTRUCTOR FOR UsersGateway OBJECT ASSIGNMENT========*//
     /**
@@ -42,9 +43,9 @@ class Auth
     {
         $this->_usersGateway = $usersGateway;
     }
-    //*==========ENDING OF CONSTRUCTOR FOR UsersGateway OBJECT ASSIGNMENT=========*//
+    //*============================================================================*//
 
-    //*=========================================================================*//
+    //*============================================================================*//
     /**
      * The authenticateAPIKey() method authenticates a valid API key
      * 
@@ -55,7 +56,6 @@ class Auth
     public function authenticateAPIKey(): bool
     {
         $api_key = $_SERVER["HTTP_X_API_KEY"];
-        $new_user = $this->_usersGateway->getByAPIKey($api_key);
 
         if (empty($api_key)) {
             
@@ -63,6 +63,8 @@ class Auth
             echo json_encode(["message" => "missing API key"]);
             return false;
         }
+
+        $new_user = $this->_usersGateway->getByAPIKey($api_key);
         
         if ($new_user === false) {
 
@@ -71,7 +73,23 @@ class Auth
             return false;
         }
 
+        $this->_users_id = $new_user["id"];
+
         return true;
+    }
+    //*===========================================================================*//
+
+    //*===========================================================================*//
+    /**
+     * The getUserID() returns the users ID
+     * 
+     * @access public  
+     * 
+     * @return int
+     */
+    public function getUsersID(): int
+    {
+        return $this->_users_id;
     }
     //*===========================================================================*//
 }

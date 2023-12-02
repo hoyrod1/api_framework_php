@@ -56,14 +56,20 @@ class TasksGateway
     /**
      * The getAll() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
      * 
+     * @param int $users_id The all the resources associated with the id
+     * 
      * @access public  
      * 
      * @return array
      */
-    public function getAll(): array
+    public function getAllForUser(int $users_id): array
     {
-        $sql = "SELECT * FROM $this->_table_name ORDER BY $this->_id DESC";
-        $stmt = $this->_conn->query($sql);
+        $sql = "SELECT * FROM $this->_table_name 
+                WHERE user_id = :users_id 
+                ORDER BY $this->_id DESC";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":users_id", $users_id, PDO::PARAM_INT);
+        $stmt->execute();
         $data = [];
         while ($results = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $results['is_completed'] = (bool) $results['is_completed'];

@@ -50,8 +50,10 @@ if (! $validated_auth) {
     exit;
 }
 
+$user_id = $auth->getUsersID();
+
 $taskGateway = new TasksGateway($database);
 
-$controller = new TaskController($taskGateway);
+$controller = new TaskController($taskGateway, $user_id);
 
 $controller->processRequest($_SERVER['REQUEST_METHOD'], $id);
