@@ -42,14 +42,30 @@ $database = new Database(
 
 $users_gateway = new UsersGateway($database);
 
+//===USE THE $_SERVER["HTTP_AUTHORIZATION"] IF THE .htaccess HAS BEEN CONFGURED===//
+// $access_token = $_SERVER["HTTP_AUTHORIZATION"];
+// var_dump($access_token);
+// exit;
+
+//===USE THE apache_request_headers() IF THE .htaccess HAS NOT BEEN CONFGURED===//
+// $headers = apache_request_headers();
+// print_r($headers);
+// exit;
+
 $auth = new Auth($users_gateway);
 
-$validated_auth = $auth->authenticateAPIKey();
+// USE FOR AUTHENTICATING APIKeys
+// $validated_auth = $auth->authenticateAPIKey();
+
+// USE FOR AUTHENTICATING Access Tokens
+$validated_auth = $auth->authenticateAccessToken();
 
 if (! $validated_auth) {
     exit;
 }
 
+// THE auth->getUsersID() RETURNS THE USERS "id" 
+// AFTER AUTHENTICATING WITH A "APIKeys" OR "AccessTokens"
 $user_id = $auth->getUsersID();
 
 $taskGateway = new TasksGateway($database);

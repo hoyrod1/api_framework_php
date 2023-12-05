@@ -11,7 +11,7 @@
  * @license  STC Media inc
  * @link     https://www.tasks/register.com
  */
-
+// NEED TO ADD session_start()
 require __DIR__ . "/vendor/autoload.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -61,17 +61,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <main class="container">
 
     <h1>Register</h1>
+    <!-- NEED TO ADD SUCCESS AND UNSUCCESFUL MESSAGE -->
     <form method="post">
 
       <label for="name"> Name 
         <input type="text" name="name" id="name"> 
       </label>
+      <!-- NEED TO ADD ERRO MESSAGE IF VALIDATION FAILS -->
       <label for="username"> Username 
         <input type="text" name="username" id="username"> 
       </label>
+      <!-- NEED TO ADD ERRO MESSAGE IF VALIDATION FAILS -->
       <label for="password"> Password 
         <input type="password" name="password" id="password"> 
       </label>
+      <!-- NEED TO ADD ERRO MESSAGE IF VALIDATION FAILS -->
       
       <button>Register</button>
     

@@ -104,4 +104,25 @@ Class UsersGateway
     }
     //*=========================================================================*//
 
+    //*=========================================================================*//
+    /**
+     * The getUserByUserName() METHOD LOGGS IN THE USER 
+     * 
+     * @param string $username This has the users username
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    public function getUserByUserName(string $username)
+    {
+        $sql = "SELECT * FROM $this->_table_name WHERE username = :username";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $results;
+    }
+    //*=========================================================================*//
+
 }

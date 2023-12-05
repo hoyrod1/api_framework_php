@@ -92,4 +92,47 @@ class Auth
         return $this->_users_id;
     }
     //*===========================================================================*//
+
+    //*============================================================================*//
+    /**
+     * The authenticateAccessToken() method authenticates a valid access token
+     * 
+     * @access public  
+     * 
+     * @return bool
+     */
+    public function authenticateAccessToken(): bool
+    {
+        $access_token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        if (! preg_match("/Bearer\s+(.*)$/", $access_token, $matches)) {
+            
+            http_response_code(400);
+            echo json_encode(["message" => "Incomplete authrization header"]);
+            return false;
+        }
+
+        $text_access_token = base64_decode($matches[1], true);
+
+        if ($text_access_token === false) {
+            
+            http_response_code(400);
+            echo json_encode(["message" => "Invalid authrization header"]);
+            return false;
+        }
+
+        $data = json_decode($text_access_token, true);
+
+        if ($data === null) {
+            
+            http_response_code(400);
+            echo json_encode(["message" => "Invalid JSON"]);
+            return false;
+        }
+
+        $this->_users_id = $data["id"];
+        
+        return true;
+    }
+    //*===========================================================================*//
 }

@@ -69,6 +69,15 @@ class TaskController
             if ($method == "GET") {
               
                 $tasks = $this->_gateway->getAllForUser($this->_users_id);
+                
+                if (count($tasks) === 0) {
+                    echo json_encode(
+                        [
+                            "message" => "You do not have any task to do :)"
+                        ]
+                    );
+                    exit;
+                }
 
                 echo json_encode($tasks);
 
@@ -82,6 +91,7 @@ class TaskController
                 // PASS IN true as 2nd AURGUMENT TO CONVERT TO ASSOCIATE ARRAY
                 // TYPE CAST THE RETURN VALUE INTO AN (array) IF THERE IS NO DATA
                 $data = (array) json_decode(file_get_contents("php://input"), true);
+                
                 $errors = $this->_getValidationError($data);
                 if (!empty($errors)) {
 
@@ -111,6 +121,7 @@ class TaskController
 
             switch ($method) {
             case 'GET':
+
                 echo json_encode($task);
                 break;
 

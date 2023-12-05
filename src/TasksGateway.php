@@ -54,7 +54,7 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The getAll() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
+     * The getAllForUser() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
      * 
      * @param int $users_id The all the resources associated with the id
      * 
@@ -81,7 +81,7 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The get() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
+     * The getForUser() METHOD TO RETEIVE ALL DATA FROM THE TASKS TABLE 
      * 
      * @param int    $user_id This is the user_id of the authenticated user
      * @param string $id      This is the id of a individual resource
@@ -108,7 +108,7 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The create() FUNCTION CREATES A NEW RESOURCE 
+     * The createForUser() FUNCTION CREATES A NEW RESOURCE 
      * 
      * @param int   $user_id This is the user_id of the authenticated user
      * @param array $data    This contains an array of data
@@ -139,7 +139,7 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The update() FUNCTION UPDATES AN EXISTING RESOURCE 
+     * The updateForUser() FUNCTION UPDATES AN EXISTING RESOURCE 
      * 
      * @param int    $user_id This is the user_id of the authenticated user
      * @param string $id      This contains an id of the resource
@@ -205,7 +205,7 @@ class TasksGateway
 
     //*=========================================================================*//
     /**
-     * The delete() FUNCTION DELETES AN EXISTING RESOURCE 
+     * The deleteForUser() FUNCTION DELETES AN EXISTING RESOURCE 
      * 
      * @param int    $user_id This is the user_id of the authenticated user
      * @param string $id      The id of a individual resource
