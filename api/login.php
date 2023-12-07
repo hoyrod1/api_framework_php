@@ -81,13 +81,17 @@ if ($password_verified === false) {
 
 // FIRST STORE THE AUTHENTICATED USER DATA IN AN ASSOCIATIVE ARRAY
 $payload = [
-    "id" => $user["id"],
+    "sub" => $user["id"],
     "name" => $user["name"]
 ];
+//============================== CODE FOR TESTING ==============================//
 // SECOND CONVERT THE ASSOCIATIVE ARRAY TO JSON STRING USING json_encode() 
-$json_payload = json_encode($payload);
+//$json_payload = json_encode($payload);
 // THIRD USE base64_encode TO CONVERT THE JSON STRING TO SIMPLE STRING OF CHARACTERS
-$access_token = base64_encode($json_payload);
+//$access_token = base64_encode($json_payload);
+//echo json_encode(["access token" => $access_token]);
+//===============================================================================//
 
+$codec = new JWTCodec();
+$access_token = $codec->encode($payload);
 echo json_encode(["access token" => $access_token]);
-

@@ -35,22 +35,24 @@ class JWTCodec
      */
     public function encode(array $payload): string 
     {
-        $header = json_encode(
-            [
-              "alg" => "HS256",
-              "typ" => "JWT"
-            ]
-        );
-        $urlsafe = $this->baseUrlEncode($header);
-        
+        // CONVERT THE HEADER AND PAYLOAD TO JSON
+        $header = json_encode(["alg" => "HS256", "typ" => "JWT"]);
         $json_payload = json_encode($payload);
+
+        // CONVERT THE JSON FORMATTED HEADER AND PAYLOAD TO URL SAFE VALUES
+        $urlsafe = $this->baseUrlEncode($header);
         $urlpayload = $this->baseUrlEncode($json_payload);
 
+        // A 256 ENCRYPTION HEX KEY
         $key = "afb15e7ba5262c7bd7a5d74ad3533510c3f311230634894e952dd0d37ffd88a2";
 
+        // GENERATE A KEYED HASH VALUED WITH THE $urlsafe, $urlpayload, $key
         $signature = hash_hmac("sha256", $urlsafe . "." . $urlpayload, $key, true);
+
+        // CONVERT THE GENERATE KEYED HASH TO A URL SAFE VALUE
         $url_safe_signature= $this->baseUrlEncode($signature);
 
+        // RETURN THE JWT FORMATTED WITH THE HEADER . PAYLOAD . SIGNATURE 
         $JWT_signature = $urlsafe . "." . $urlpayload . "." . $url_safe_signature;
 
         return $JWT_signature;
