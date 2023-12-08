@@ -72,7 +72,7 @@ class JWTCodec
         $signature = hash_hmac("sha256", $urlsafe . "." . $urlpayload, $key, true);
 
         // CONVERT THE GENERATE KEYED HASH TO A URL SAFE VALUE
-        $url_safe_signature= $this->base64UrlEncode($signature);
+        $url_safe_signature = $this->base64UrlEncode($signature);
 
         // RETURN THE JWT FORMATTED WITH THE HEADER . PAYLOAD . SIGNATURE 
         $JWT_signature = $urlsafe . "." . $urlpayload . "." . $url_safe_signature;

@@ -42,6 +42,8 @@ $database = new Database(
 
 $users_gateway = new UsersGateway($database);
 
+$JWTCodec = new JWTCodec($_ENV['SECRET_KEY']);
+
 //===USE THE $_SERVER["HTTP_AUTHORIZATION"] IF THE .htaccess HAS BEEN CONFGURED===//
 // $access_token = $_SERVER["HTTP_AUTHORIZATION"];
 // var_dump($access_token);
@@ -52,7 +54,7 @@ $users_gateway = new UsersGateway($database);
 // print_r($headers);
 // exit;
 
-$auth = new Auth($users_gateway);
+$auth = new Auth($users_gateway, $JWTCodec);
 
 // USE FOR AUTHENTICATING APIKeys
 // $validated_auth = $auth->authenticateAPIKey();

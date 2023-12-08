@@ -24,24 +24,27 @@
 
 class Auth
 {
-    //*=========BEGINNING OF PRIVATE PROPERTIES FOR UsersGateway Class=========*//
+    //*THE PRIVATE PROPERTIES FOR UsersGateway Class, JWTCodec Class AND user_id*//
     private $_usersGateway;
+    private $_JWTCodec;
     private $_users_id;
     //*=========================================================================*//
 
     //*========BEGINNING OF CONSTRUCTOR FOR UsersGateway OBJECT ASSIGNMENT========*//
     /**
-     * This constructor takes in the TasksGateway object
+     * This constructor takes in the TasksGateway and JWTCodec object
      *
      * @param mixed $usersGateway 
+     * @param mixed $jWTCodec 
      * 
      * @access public  
      * 
      * @return mixed
      */
-    function __construct(UsersGateway $usersGateway)
+    function __construct(UsersGateway $usersGateway, JWTCodec $jWTCodec)
     {
         $this->_usersGateway = $usersGateway;
+        $this->_JWTCodec = $jWTCodec;
     }
     //*============================================================================*//
 
@@ -112,27 +115,48 @@ class Auth
             return false;
         }
 
-        $text_access_token = base64_decode($matches[1], true);
+        //=================THIS IS USED FOR JSON Web Token(JWT)===================//
+        try {
 
-        if ($text_access_token === false) {
-            
+             $data = $this->_JWTCodec->decode($matches[1]);
+
+        } catch (Exception $e) {
+
             http_response_code(400);
-            echo json_encode(["message" => "Invalid authrization header"]);
+            echo json_encode(["message" => $e->getMessage()]);
             return false;
+
         }
 
-        $data = json_decode($text_access_token, true);
+        $this->_users_id = $data["sub"];
 
-        if ($data === null) {
-            
-            http_response_code(400);
-            echo json_encode(["message" => "Invalid JSON"]);
-            return false;
-        }
 
-        $this->_users_id = $data["id"];
-        
         return true;
+        //========================================================================//
+
+        //============THIS IS USED FOR base64_encoded Access Tokens============//
+        // $text_access_token = base64_decode($matches[1], true);
+
+        // if ($text_access_token === false) {
+            
+        //     http_response_code(400);
+        //     echo json_encode(["message" => "Invalid authrization header"]);
+        //     return false;
+        // }
+
+        // $data = json_decode($text_access_token, true);
+
+        // if ($data === null) {
+            
+        //     http_response_code(400);
+        //     echo json_encode(["message" => "Invalid JSON"]);
+        //     return false;
+        // }
+        //
+        // $this->_users_id = $data["id"];
+        //
+        // return true;
+        //========================================================================//
     }
     //*===========================================================================*//
 }
