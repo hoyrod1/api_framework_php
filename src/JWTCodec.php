@@ -23,6 +23,28 @@
  */
 class JWTCodec
 {
+    //*====================PRIVATE PROPERTY FOR JWTCodec Class====================*//
+    private $_key;
+    //*===========================================================================*//
+
+
+    //*========THIS CONSTRUCTOR RECIEVES THE 256 ENCRYPTION HEX KEY========*//
+    /**
+     * This constructor takes in the Secret 256 Encryption Hex Key
+     *
+     * @param string $key 
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    function __construct(string $key)
+    {
+        $this->_key = $key;
+    }
+    //*============================================================================*//
+
+
     //*===========================================================================*//
     /**
      * The encode() returns the users credintials encrypted
@@ -43,8 +65,8 @@ class JWTCodec
         $urlsafe = $this->base64UrlEncode($header);
         $urlpayload = $this->base64UrlEncode($json_payload);
 
-        // A 256 ENCRYPTION HEX KEY
-        $key = "afb15e7ba5262c7bd7a5d74ad3533510c3f311230634894e952dd0d37ffd88a2";
+        // THE 256 ENCRYPTION HEX KEY STORED IN THE .env FIE
+        $key = $this->_key;
 
         // GENERATE A KEYED HASH VALUED WITH THE $urlsafe, $urlpayload, $key
         $signature = hash_hmac("sha256", $urlsafe . "." . $urlpayload, $key, true);
@@ -62,7 +84,7 @@ class JWTCodec
 
     //*===========================================================================*//
     /**
-     * The decode() returns the users credintials after being decoded
+     * The decode() function returns the users credintials after being decoded
      * 
      * @param string $token This contains the encrypted credintials for the user 
      * 
@@ -83,8 +105,9 @@ class JWTCodec
             throw new InvalidArgumentException("Invalid token");
 
         }
-        // THE ORIGINAL 256 ENCRYPTION HEX KEY FROM THE ENCODE METHOD
-        $key = "afb15e7ba5262c7bd7a5d74ad3533510c3f311230634894e952dd0d37ffd88a2";
+        
+        // THE 256 ENCRYPTION HEX KEY STORED IN THE .env FIE
+        $key = $this->_key;
 
         $signature = hash_hmac(
             "sha256", 
