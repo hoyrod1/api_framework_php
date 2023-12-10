@@ -6,7 +6,7 @@
  * Page for Api Controller
  * 
  * @category Controller
- * @package  Curl_Configuration
+ * @package  Controller_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
  * @link     https://www.tasks/src/TaskController.php

@@ -1,7 +1,7 @@
 <?php
 /**
  * * @file
- * php version 7.4.33
+ * php version 8.2.0
  * 
  * Page for Api Authentication Configurations
  * 
@@ -106,7 +106,7 @@ class JWTCodec
 
         }
         
-        // THE 256 ENCRYPTION HEX KEY STORED IN THE .env FIE
+        // THE 256 ENCRYPTION HEX KEY STORED IN THE .env FILE
         $key = $this->_key;
 
         $signature = hash_hmac(
@@ -122,7 +122,12 @@ class JWTCodec
 
         if (! $checked_hashes) {
           
-            throw new Exception("The signatures do not match");
+            //==THIS CUSTOM Exception Handler Class EXTENDS THE Exception CLASS===//
+            //====================USE PHP VERSION 8.0 OR HIGHER===================//
+            throw new InvalidSignatureException;
+
+            // THIS IS THE STANDARD Exception CLASS
+            // throw new Exception("The signatures do not match");
 
         }
 

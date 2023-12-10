@@ -1,7 +1,7 @@
 <?php
 /**
  * * @file
- * php version 8.0
+ * php version 8.2.0
  * 
  * Page for Api Database Connection
  * 
@@ -24,6 +24,7 @@
 class Database
 {
     //*=====BEGINNING OF CONSTRUCTOR FOR DATABASE PROPERTY ASSIGNMENT========*//
+    //===================USE WITH PHP VERSION 8.0 OR HIGHER===================//
     /**
      * This constructor assigns the database values using Constructor promotion
      * The values is added when you add a visibility to the function aurgument 

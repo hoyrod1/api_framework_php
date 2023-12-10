@@ -6,7 +6,7 @@
  * Page for Error Handling
  * 
  * @category Error_Handler
- * @package  Curl_Configuration
+ * @package  Error_Handle_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
  * @link     https://www.tasks/src/ErrorHandler.php

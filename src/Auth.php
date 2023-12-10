@@ -1,7 +1,7 @@
 <?php
 /**
  * * @file
- * php version 7.4.33
+ * php version 8.2.0
  * 
  * Page for Api Authentication Configurations
  * 
@@ -120,13 +120,20 @@ class Auth
 
              $data = $this->_JWTCodec->decode($matches[1]);
 
+        } catch (InvalidSignatureException) {
+
+            // FOR THIS CUSTOM EXCEPTIONS HANDLER TO RUN PHP 8.0 OR HIGHER
+            http_response_code(401);
+            echo json_encode(["message" => "The signatures do not match"]);
+            return false;
+
         } catch (Exception $e) {
 
             http_response_code(400);
             echo json_encode(["message" => $e->getMessage()]);
             return false;
 
-        }
+        } 
 
         $this->_users_id = $data["sub"];
 

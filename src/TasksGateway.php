@@ -6,7 +6,7 @@
  * Page for Api Tasks Configurations
  * 
  * @category Tasks_Gateway_Configuration
- * @package  Class_Configuration
+ * @package  Tasks_Configuration
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
  * @link     https://www.tasks/src/TaskGateway.php
