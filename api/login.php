@@ -92,21 +92,26 @@ $payload = [
 //=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
 $JWTcodec = new JWTCodec($_ENV['SECRET_KEY']);
 $access_token = $JWTcodec->encode($payload);
-
-echo json_encode(["access token" => $access_token]);
 //=================================================================================//
 
 
 //==============GENERATE A REFRESH TOKEN WHEN THE ACCESS TOKEN EXIRES==============//
-//=====CREATE A ASSOCIATIVE ARRAY STORING THE ========//
-//=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
+//CREATE A ASSOCIATIVE ARRAY STORING THE USERS ID AND A EXPIRY OF THE REFRESH TOKEN//
+//====CALL THE encode() FUNCTION AND PASS THE $refresh_token IN AS THE ARGUMENT====//
 $refresh_token = [
   "sub" => $user["id"],
   "exp" => time() + 432000 // 432000sec = 5 days experation time
 ];
 $encoded_refresh_token = $JWTcodec->encode($refresh_token);
+//=================================================================================//
 
-echo json_encode(["refresh access token" => $encoded_refresh_token]);
+//=============ECHO OUT THE JSON ENCODED ACCESS TOKEN AND REFRESH TOKEN============//
+echo json_encode(
+    [
+      "access token" => $access_token,
+      "refresh token" => $encoded_refresh_token
+    ]
+);
 //===============================================================================//
 
 
