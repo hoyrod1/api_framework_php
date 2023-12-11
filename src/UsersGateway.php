@@ -125,4 +125,26 @@ Class UsersGateway
     }
     //*=========================================================================*//
 
+    //*=========================================================================*//
+    /**
+     * The getUserByRefreshTokenId() METHOD RETRIEVES THE USER DATA
+     * 
+     * @param int $id This has the users id
+     * 
+     * @access public  
+     * 
+     * @return mixed
+     */
+    public function getUserByRefreshTokenId(int $id)
+    {
+        $sql = "SELECT * FROM $this->_table_name WHERE id = :id";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $results;
+    }
+    //*=========================================================================*//
+
+
 }

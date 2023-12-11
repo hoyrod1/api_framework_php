@@ -56,7 +56,26 @@ try {
 
 }
 
-$user_id = $refresh_payload["sub"];
+$refresh_user_id = (int) $refresh_payload["sub"];
 
-var_dump($user_id);
+$database = new Database(
+    $_ENV['DB_HOST'], 
+    $_ENV['DB_USER'], 
+    $_ENV['DB_PASS'], 
+    $_ENV['DB_NAME']
+);
+
+$users_gateway = new UsersGateway($database);
+
+$user = $users_gateway->getUserByRefreshTokenId($refresh_user_id);
+
+if ($user === false) {
+  
+    http_response_code(401);
+    echo json_encode(["message" => "Invalid Authentication"]);
+    exit;
+
+}
+var_dump($user);
+exit;
 //=================================================================================//
