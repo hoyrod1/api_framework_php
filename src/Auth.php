@@ -120,6 +120,13 @@ class Auth
 
              $data = $this->_JWTCodec->decode($matches[1]);
 
+        } catch (TokenExpiredException) {
+
+            // FOR THIS CUSTOM EXCEPTIONS HANDLER TO RUN PHP 8.0 OR HIGHER
+            http_response_code(401);
+            echo json_encode(["message" => "Your login has expired"]);
+            return false;
+
         } catch (InvalidSignatureException) {
 
             // FOR THIS CUSTOM EXCEPTIONS HANDLER TO RUN PHP 8.0 OR HIGHER

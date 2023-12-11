@@ -135,6 +135,15 @@ class JWTCodec
 
         $decoded_payload = json_decode($payload, true);
 
+        if ($decoded_payload["exp"] < time()) {
+          
+            //==THIS CUSTOM Exception Handler Class EXTENDS THE Exception CLASS===//
+            //====================USE PHP VERSION 8.0 OR HIGHER===================//
+            throw new TokenExpiredException;
+
+          
+        }
+
         return $decoded_payload;
 
     }

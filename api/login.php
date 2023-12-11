@@ -82,8 +82,34 @@ if ($password_verified === false) {
 // FIRST STORE THE AUTHENTICATED USER DATA IN AN ASSOCIATIVE ARRAY
 $payload = [
     "sub" => $user["id"],
-    "name" => $user["name"]
+    "name" => $user["name"],
+    "exp" => time() + 20 // 300sec = 5 minute experation time
 ];
+//===============================================================================//
+
+
+//=====CREATE A NEW JWTCodec Object PASS THE SECRET KEY IN AS THE ARGUMENT========//
+//=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
+$JWTcodec = new JWTCodec($_ENV['SECRET_KEY']);
+$access_token = $JWTcodec->encode($payload);
+
+echo json_encode(["access token" => $access_token]);
+//=================================================================================//
+
+
+//==============GENERATE A REFRESH TOKEN WHEN THE ACCESS TOKEN EXIRES==============//
+//=====CREATE A ASSOCIATIVE ARRAY STORING THE ========//
+//=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
+$refresh_token = [
+  "sub" => $user["id"],
+  "exp" => time() + 432000 // 432000sec = 5 days experation time
+];
+$encoded_refresh_token = $JWTcodec->encode($refresh_token);
+
+echo json_encode(["refresh access token" => $encoded_refresh_token]);
+//===============================================================================//
+
+
 //============================== CODE FOR TESTING ==============================//
 // SECOND CONVERT THE ASSOCIATIVE ARRAY TO JSON STRING USING json_encode() 
 //$json_payload = json_encode($payload);
@@ -91,7 +117,3 @@ $payload = [
 //$access_token = base64_encode($json_payload);
 //echo json_encode(["access token" => $access_token]);
 //===============================================================================//
-
-$codec = new JWTCodec($_ENV['SECRET_KEY']);
-$access_token = $codec->encode($payload);
-echo json_encode(["access token" => $access_token]);
