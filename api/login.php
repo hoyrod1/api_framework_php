@@ -75,44 +75,12 @@ if ($password_verified === false) {
 
 }
 
-//=================CREATE AN ACCESS TOKEN TO RETRIEVE USER DATA================//
-//THE ACCESS TOKEN WILL BE A SINGLE STRING WHICH IS SENT IN THE REQUEST HEADER//
-//==========THIS ACCESS TOKEN WILL BE GENERATED USING base64_encode()==========//
-
-// FIRST STORE THE AUTHENTICATED USER DATA IN AN ASSOCIATIVE ARRAY
-$payload = [
-    "sub" => $user["id"],
-    "name" => $user["name"],
-    "exp" => time() + 20 // 300sec = 5 minute experation time
-];
-//===============================================================================//
-
-
 //=====CREATE A NEW JWTCodec Object PASS THE SECRET KEY IN AS THE ARGUMENT========//
-//=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
 $JWTcodec = new JWTCodec($_ENV['SECRET_KEY']);
-$access_token = $JWTcodec->encode($payload);
-//=================================================================================//
 
 
-//=============GENERATE A REFRESH TOKEN WHEN THE ACCESS TOKEN EXPIRES==============//
-//CREATE A ASSOCIATIVE ARRAY STORING THE USERS ID AND A EXPIRY OF THE REFRESH TOKEN//
-//====CALL THE encode() FUNCTION AND PASS THE $refresh_token IN AS THE ARGUMENT====//
-$refresh_token = [
-  "sub" => $user["id"],
-  "exp" => time() + 432000 // 432000sec = 5 days experation time
-];
-$encoded_refresh_token = $JWTcodec->encode($refresh_token);
-//=================================================================================//
-
-//=============ECHO OUT THE JSON ENCODED ACCESS TOKEN AND REFRESH TOKEN============//
-echo json_encode(
-    [
-      "access token" => $access_token,
-      "refresh token" => $encoded_refresh_token
-    ]
-);
-//===============================================================================//
+//REQUIRE THE token.php FILE TO GENERATE A NEW Access Token AND A Refresh token//
+require __DIR__ . "/tokens.php";
 
 
 //============================== CODE FOR TESTING ==============================//

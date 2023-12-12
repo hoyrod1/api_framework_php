@@ -3,13 +3,13 @@
  * * @file
  * php version 8.2.0
  * 
- * Login Page for Api To-Do-List
+ * Refresh Access Token Page for Api To-Do-List
  * 
- * @category Php_API
+ * @category Refresh_Access_Token
  * @package  Src-Folder
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.tasks/refresh.com
+ * @link     https://www.tasks/api/refresh.com
  */
 
 declare(strict_types=1);
@@ -76,6 +76,15 @@ if ($user === false) {
     exit;
 
 }
-var_dump($user);
-exit;
+
+//=================================================================================//
+//   LOGIC CAN BE ADD TO CHECK IF THE USERS ACCOUNT IS DISABLED   //
+// WITH A "boolean" COLUMN IN THE RECORDS THAT CAN BE SET TO FALSE //
+
+//=================================================================================//
+
+
+//REQUIRE THE token.php FILE TO GENERATE A NEW Access Token AND A Refresh token//
+require __DIR__ . "/tokens.php";
+
 //=================================================================================//
