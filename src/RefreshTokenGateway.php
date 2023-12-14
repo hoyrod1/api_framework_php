@@ -57,7 +57,7 @@ class RefreshTokenGateway
     /**
      * The createRefreshToken() FUNCTION CREATES A NEW RESOURCE 
      * 
-     * @param string $token      This contains the hashed refresh token
+     * @param string $token      This contains the refresh token payload
      * @param int    $expires_at This contains the refresh token experation time
      * 
      * @access public  
@@ -85,22 +85,49 @@ class RefreshTokenGateway
 
     //*=========================================================================*//
     /**
+     * DeleteRefreshToken() DELETES THE REFRESH TOKEN FROM THE refresh_token TABLE 
+     * 
+     * @param string $token This contains the refresh token payload
+     * 
+     * @access public  
+     * 
+     * @return int
+     */
+    public function deleteRefreshToken(string $token): int
+    {
+
+        $this->_hash_token = hash_hmac("sha256", $token, $this->_key);
+
+        $sql = "DELETE FROM $this->_table_name WHERE token_hash = :_hash_token";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":_hash_token", $this->_hash_token, PDO::PARAM_STR);
+        $stmt->execute();
+        $results = $stmt->rowCount();
+        return $results;
+    }
+    //*=========================================================================*//
+
+    //*=========================================================================*//
+    /**
      * The getRefreshToken() GETS THE REFRESH TOKEN FROM THE refresh_token TABLE 
      * 
-     * @param string $id This has the API Key
+     * @param string $token This contains the refresh token payload
      * 
      * @access public  
      * 
      * @return mixed
      */
-    public function getRefreshToken(string $id)
+    public function getRefreshToken(string $token)
     {
-        // $sql = "SELECT * FROM $this->_table_name WHERE id = :id";
-        // $stmt = $this->_conn->prepare($sql);
-        // $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-        // $stmt->execute();
-        // $results = $stmt->fetch(PDO::FETCH_ASSOC);
-        // return $results;
+
+        $this->_hash_token = hash_hmac("sha256", $token, $this->_key);
+
+        $sql = "SELECT * FROM $this->_table_name WHERE token_hash = :_hash_token";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bindValue(":_hash_token", $this->_hash_token, PDO::PARAM_STR);
+        $stmt->execute();
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $results;
     }
     //*=========================================================================*//
 
