@@ -77,10 +77,26 @@ if ($password_verified === false) {
 
 //=====CREATE A NEW JWTCodec Object PASS THE SECRET KEY IN AS THE ARGUMENT========//
 $JWTcodec = new JWTCodec($_ENV['SECRET_KEY']);
+//=============================================================================//
 
 
 //REQUIRE THE token.php FILE TO GENERATE A NEW Access Token AND A Refresh token//
 require __DIR__ . "/tokens.php";
+//=============================================================================//
+
+
+//==================CREATE A NEW RefreshTokenGateway Object====================//
+//========PASS THE DATABASE OBJECT AND THE SECRET KEY IN AS THE ARGUMENT=======//
+$RefreshTokenGateway = new RefreshTokenGateway($database, $_ENV['SECRET_KEY']);
+//=============================================================================//
+
+//===CALL THE createRefreshToken() METHOD FROM THE RefreshTokenGateway Object==//
+//========PASS THE DATABASE OBJECT AND THE SECRET KEY IN AS THE ARGUMENT=======//
+$createRefreshToken = $RefreshTokenGateway->createRefreshToken(
+    $encoded_refresh_token, 
+    $refresh_token_expiry
+);
+//=============================================================================//
 
 
 //============================== CODE FOR TESTING ==============================//

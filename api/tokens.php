@@ -32,9 +32,10 @@ $access_token = $JWTcodec->encode($payload);
 //=============GENERATE A REFRESH TOKEN WHEN THE ACCESS TOKEN EXPIRES==============//
 //CREATE A ASSOCIATIVE ARRAY STORING THE USERS ID AND A EXPIRY OF THE REFRESH TOKEN//
 //====CALL THE encode() FUNCTION AND PASS THE $refresh_token IN AS THE ARGUMENT====//
+$refresh_token_expiry = time() + 432000; // 432000sec = 5 days experation time;
 $refresh_token = [
       "sub" => $user["id"],
-      "exp" => time() + 432000 // 432000sec = 5 days experation time
+      "exp" => $refresh_token_expiry
 ];
 
 //=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
@@ -48,4 +49,4 @@ echo json_encode(
       "refresh token" => $encoded_refresh_token
     ]
 );
-//===============================================================================//
+//=================================================================================//
