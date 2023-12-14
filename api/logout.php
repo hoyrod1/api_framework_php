@@ -3,13 +3,13 @@
  * * @file
  * php version 8.2.0
  * 
- * Refresh Access Token Page for Api To-Do-List
+ * Remove Access Token logut of Api To-Do-List
  * 
- * @category Refresh_Access_Token
+ * @category Remove_Access_Token
  * @package  Src-Folder
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.tasks/api/refresh.com
+ * @link     https://www.tasks/api/logout.com
  */
 
 declare(strict_types=1);
@@ -56,9 +56,6 @@ try {
 
 }
 
-//USE THE USERS "id" IN THE REFRESH_TOKEN PAYLOAD WITH THE KEY OF "sub"//
-$refresh_user_id = (int) $refresh_payload["sub"];
-
 $database = new Database(
     $_ENV['DB_HOST'], 
     $_ENV['DB_USER'], 
@@ -84,43 +81,8 @@ if ($Valid_Refresh_Token === false) {
 }
 //=============================================================================//
 
-$users_gateway = new UsersGateway($database);
-
-$user = $users_gateway->getUserByRefreshTokenId($refresh_user_id);
-
-if ($user === false) {
-  
-    http_response_code(401);
-    echo json_encode(["message" => "Invalid Authentication"]);
-    exit;
-
-}
-
-
-//=============================================================================//
-//   LOGIC CAN BE ADD TO CHECK IF THE USERS ACCOUNT IS DISABLED   //
-// WITH A "boolean" COLUMN IN THE RECORDS THAT CAN BE SET TO FALSE //
-
-//=============================================================================//
-
-
-//=============================================================================//
-//REQUIRE THE token.php FILE TO GENERATE A NEW Access Token AND A Refresh token//
-require __DIR__ . "/tokens.php";
-//=============================================================================//
-
 
 //==============DELETE THE EXISTING REFRESH TOKEN IN THE DATABASE==============//
 //=======PASS IN THE VALUE OF THE TOKEN FROM THE REQUEST AS THE ARGUMENT=======//
 $delRefreshToken = $RefreshTokenGateway->deleteRefreshToken($data["token"]);
-//=============================================================================//
-
-
-//=============================================================================//
-//===CALL THE createRefreshToken() METHOD FROM THE RefreshTokenGateway Object==//
-//========PASS THE DATABASE OBJECT AND THE SECRET KEY IN AS THE ARGUMENT=======//
-$createRefreshToken = $RefreshTokenGateway->createRefreshToken(
-    $encoded_refresh_token, 
-    $refresh_token_expiry
-);
 //=============================================================================//
