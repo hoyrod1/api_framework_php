@@ -1,7 +1,7 @@
 <?php
 /**
  * * @file
- * php version 7.4.33
+ * php version 8.2.0
  * 
  * Required functionality for the index page
  * 
@@ -9,7 +9,7 @@
  * @package  Vendor-Composer-.env-src-error-handler-header-content-type
  * @author   Rodney St.Cloud <hoyrod1@aol.com>
  * @license  STC Media inc
- * @link     https://www.tasks.com
+ * @link     https://www.tasks.com/api/bootstrap.com
  */
 
 require dirname(__DIR__) . "/vendor/autoload.php";

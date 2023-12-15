@@ -131,4 +131,22 @@ class RefreshTokenGateway
     }
     //*=========================================================================*//
 
+    //*=========================================================================*//
+    /**
+     * DeleteExpiredToken() DELETES THE EXPIRED TOKEN FROM THE refresh_token TABLE 
+     * 
+     * @access public  
+     * 
+     * @return int
+     */
+    public function deleteExpiredToken(): int
+    {
+
+        $sql = "DELETE FROM $this->_table_name WHERE expires_at < UNIX_TIMESTAMP()";
+        $stmt = $this->_conn->query($sql);
+        $results = $stmt->rowCount();
+        return $results;
+    }
+    //*=========================================================================*//
+
 }
