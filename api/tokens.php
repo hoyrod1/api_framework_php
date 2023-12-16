@@ -21,7 +21,7 @@
 $payload = [
       "sub" => $user["id"],
       "name" => $user["name"],
-      "exp" => time() + 20 // 300sec = 5 minute experation time
+      "exp" => time() + 300 // 300sec = 5 minute experation time
 ];
 
 //=====CALL THE encode() FUNCTION AND PASS THE $payload IN AS THE ARGUMENT========//
@@ -45,8 +45,8 @@ $encoded_refresh_token = $JWTcodec->encode($refresh_token);
 //=============ECHO OUT THE JSON ENCODED ACCESS TOKEN AND REFRESH TOKEN============//
 echo json_encode(
     [
-      "access token" => $access_token,
-      "refresh token" => $encoded_refresh_token
+      "access_token" => $access_token,
+      "refresh_token" => $encoded_refresh_token
     ]
 );
 //=================================================================================//
